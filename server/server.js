@@ -33,8 +33,19 @@ let counter = 0;
 io.on('connection', (socket) => {
     counter++;
     console.log(counter+' someone connected');
-    socket.on('sendToAll', (message) => {
-        io.emit("displayMessage", (message));
-        console.log(message);
+    /*
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
     });
+    */
+    // Sending the message to everyone, including the sender
+    socket.on('sendToAll', (message) => {
+        io.emit('chat message', (message));
+    });
+
+    // Sending a message readable for yourself
+    socket.on('sendToSelf', (message) => {
+        // socket.emit will only send the message back to the socket of which it received the message
+        socket.emit('chat message', (message));
+    })
 });
