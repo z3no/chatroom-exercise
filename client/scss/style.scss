@@ -39,3 +39,16 @@ body {
   }
 }
 
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 0.5rem 1rem;
+
+    &:nth-child(odd) {
+      background: #efefef;
+    }
+  }
+}
