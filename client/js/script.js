@@ -2,30 +2,37 @@
 let socket = io.connect();
 
 // Buttons
-let sendToAll = document.getElementById('sendToAll');
-let sendToSelf = document.getElementById('sendToSelf');
+let sendAll = document.getElementById('sendToAll');
+let sendSelf = document.getElementById('sendToSelf');
+
+// Input
+let input = document.getElementById('input');
 
 // Target for messages
-let target = document.getElementById('target');
+let target = document.getElementById('messages');
 
 // Send message to all
-function displayMessageToAll() {
-    let message = document.getElementById('message').value;
-    socket.emit('sendToAll', (message));
-    console.log(message);
-}
-
-socket.on('displayMessage', (message) => {
-    target.innerHTML += '<br>'+message;
+sendAll.addEventListener('click', function (e){
+    // The preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the event will not occur.
+    e.preventDefault();
+    if (input.value) {
+        socket.emit('sendToAll', input.value);
+        input.value = '';
+    }
 });
 
-sendToAll.addEventListener('click', displayMessageToAll);
-
 // Send message to self
-function displayMessageToSelf() {
-    let message = document.getElementById('message').value;
-    socket.emit('sendToSelf', (message));
-    console.log(message);
-}
+sendSelf.addEventListener('click', function (e){
+    e.preventDefault();
+    if (input.value) {
+        socket.emit('sendToSelf', input.value);
+        input.value = '';
+    }
+});
 
-sendToSelf.addEventListener('click', displayMessageToSelf);
+socket.on('chat message', function (message) {
+    let item = document.createElement('li');
+    item.textContent = message;
+    target.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+});
