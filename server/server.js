@@ -30,22 +30,50 @@ io.on('connection', (socket) => {
 // Connect multiple devices to our server
 let counter = 0;
 
+// Save the list of users as id:username
+let users = {};
+
 io.on('connection', (socket) => {
     counter++;
     console.log(counter+' someone connected');
+    console.log('👾 New socket connected! >>', socket.id);
     /*
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
     */
-    // Sending the message to everyone, including the sender
-    socket.on('sendToAll', (message) => {
-        io.emit('chat message', (message));
+
+    // handle the new user connection
+    socket.on('new-connection', (data) => {
+        // captures event when new clients join
+        console.log(`new-connection event received`, data);
+        // add user to list
+        users[socket.id] = data.username;
+        console.log('users :>> ', users);
+        // emit welcome message event
+        socket.emit('welcome-message', {
+            user: 'server',
+            message: `Welcome to this OG chatroom ${data.username}. There are currently ${Object.keys(users).length} users connected.`,
+        })
+    })
+
+    // handle message posted by client, visible to all users
+    socket.on('new-message-toAll', (data) => {
+        console.log(`👾 new-message-toAll from ${data.user}`);
+        // broadcast message to all sockets except the one that triggered the event
+        socket.broadcast.emit('broadcast-message', {
+            user: users[data.user],
+            message: data.message,
+        })
     });
 
-    // Sending a message readable for yourself
-    socket.on('sendToSelf', (message) => {
-        // socket.emit will only send the message back to the socket of which it received the message
-        socket.emit('chat message', (message));
-    })
+    // Sending a message only readable for yourself
+    socket.on('message-only-visible-toSelf', (data) => {
+        console.log(`👾 message-only-visible-toSelf from ${data.user}`);
+        // broadcast message to all sockets except the one that triggered the event
+        socket.emit('broadcast-message', {
+            user: users[data.user],
+            message: data.message,
+        })
+    });
 });
