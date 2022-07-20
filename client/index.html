@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OCR - Orginal ChatRoom</title>
+    <title>OGCR - OG ChatRoom</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -13,11 +13,14 @@
 </head>
 <body>
 
-    <section>
-        <div>
-            <ul id="messages"></ul>
+    <section id="app">
+        <h1 class="center">OG Chatroom</h1>
+
+        <!-- Chat messages will be appended inside this container -->
+        <div id="chatContainer">
         </div>
 
+        <!-- Form to enter and submit new chat messages -->
         <form id="form" action="">
             <input type="text" name="inputfield" id="input" class="input">
             <button type="submit" id="sendToAll">Send All</button>
@@ -29,6 +32,6 @@
 
     <!-- SCRIPTS -->
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/script.js"></script>
+    <script defer src="js/script.js"></script>
 </body>
 </html>
