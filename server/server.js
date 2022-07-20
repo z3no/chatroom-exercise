@@ -29,6 +29,37 @@ io.on('connection', (socket) => {
     counter++;
     console.log(counter+' someone connected.');
 
+    socket.emit('newMessage', {
+        from: "Admin",
+        text: "Welcome to the chat!",
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+        from: "Admin",
+        text: "New user joined!",
+        createdAt: new Date().getTime()
+    });
+
+    socket.on('createMessage', (message) => {
+        console.log("createMessage", message);
+        //io, everyone connected, everyone gets this message even itself
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            // to prevent spoofing
+            // Spoofing is a cybercrime that happens when someone impersonates a trusted contact or brand, pretending to be someone you trust in order to access sensitive personal information.
+            createdAt: new Date().getTime()
+        });
+
+        // broadcast sends an event to everyone, except for the person that created the event
+        // socket.broadcast.emit('newMessage', {
+        //         from: message.from,
+        //         text: message.text,
+        //         createdAt: new Date().getTime()
+        //     });
+    })
+
     socket.on('disconnect', () => {
         console.log('A user disconnected.');
     });
