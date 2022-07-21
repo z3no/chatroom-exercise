@@ -2,7 +2,7 @@
 const express = require('express');
 const http = require('http');
 
-const {newMessage} = require('./utils/message');
+const {newMessage, newLocationMessage} = require('./utils/message');
 
 // We will use express and http to host our client
 // Define our application
@@ -47,6 +47,11 @@ io.on('connection', (socket) => {
         //         text: message.text,
         //         createdAt: new Date().getTime()
         //     });
+    })
+
+    socket.on('createLocationMessage', (coords) => {
+        //emit to everybody including ourselves
+        io.emit('newLocationMessage', newLocationMessage('Admin', coords.lat, coords.lng))
     })
 
     socket.on('disconnect', () => {
