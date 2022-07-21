@@ -2,6 +2,8 @@
 const express = require('express');
 const http = require('http');
 
+const {newMessage} = require('./utils/message');
+
 // We will use express and http to host our client
 // Define our application
 const app = express();
@@ -29,28 +31,15 @@ io.on('connection', (socket) => {
     counter++;
     console.log(counter+' someone connected.');
 
-    socket.emit('newMessage', {
-        from: "Admin",
-        text: "Welcome to the chat!",
-        createdAt: new Date().getTime()
-    });
+    socket.emit('newMessage', newMessage('Admin', 'Welcome to the chat!'));
 
-    socket.broadcast.emit('newMessage', {
-        from: "Admin",
-        text: "New user joined!",
-        createdAt: new Date().getTime()
-    });
+    socket.broadcast.emit('newMessage', newMessage('Admin', 'New user joined!'));
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log("createMessage", message);
         //io, everyone connected, everyone gets this message even itself
-        io.emit('newMessage', {
-            from: message.from,
-            text: message.text,
-            // to prevent spoofing
-            // Spoofing is a cybercrime that happens when someone impersonates a trusted contact or brand, pretending to be someone you trust in order to access sensitive personal information.
-            createdAt: new Date().getTime()
-        });
+        io.emit('newMessage', newMessage(message.from, message.text));
+        callback('This is the server:');
 
         // broadcast sends an event to everyone, except for the person that created the event
         // socket.broadcast.emit('newMessage', {
