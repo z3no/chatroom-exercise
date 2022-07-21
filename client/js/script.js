@@ -14,7 +14,7 @@ socket.on('disconnect', function () {
 socket.on('newMessage', function (message) {
     console.log('newMessage', message);
     let li = document.createElement('li');
-    li.innerText = `${message.from}: ${message.text}`;
+    li.innerText = `${message.from} ${message.createdAt}: ${message.text}`;
 
     document.querySelector('body').appendChild(li);
 });
