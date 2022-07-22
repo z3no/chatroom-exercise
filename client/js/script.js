@@ -14,22 +14,29 @@ socket.on('disconnect', function () {
 socket.on('newMessage', function (message) {
     console.log('newMessage', message);
     let li = document.createElement('li');
-    li.innerText = `${message.from} ${message.createdAt}: ${message.text}`;
+    li.setAttribute('class', 'message');
+    li.innerHTML = `<div class="messageTitle">
+                        <h4>${message.from} <span>at ${message.createdAt}</span></h4>
+                    </div>
+                    <div class="messageBody">
+                        <p>${message.text}</p>
+                    </div>`;
 
-    document.querySelector('body').appendChild(li);
+    document.querySelector('ul.chatMessages').appendChild(li);
 });
 
 socket.on('newLocationMessage', function (message) {
     console.log('newLocationMessage', message);
     let li = document.createElement('li');
-    let a = document.createElement('a');
-    //opens another tab
-    a.setAttribute('target', '_blank');
-    a.setAttribute('href', message.url);
-    a.innerText = 'My current location';
-    li.appendChild(a);
+    li.setAttribute('class', 'message');
+    li.innerHTML = `<div class="messageTitle">
+                        <h4>${message.from} <span>at ${message.createdAt}</span></h4>
+                    </div>
+                    <div class="messageBody">
+                        <a href="${message.url}" target="_blank">My current location</a>
+                    </div>`;
 
-    document.querySelector('body').appendChild(li);
+    document.querySelector('ul.chatMessages').appendChild(li);
 });
 
 document.querySelector('#submit-btn').addEventListener('click', function (e){
