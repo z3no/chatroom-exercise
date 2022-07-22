@@ -1,6 +1,13 @@
 // Define socket
 let socket = io();
 
+// Function to automatically scroll down when someone sents a new message
+function scrollToBottom () {
+    //last message the user sent = lastElementChild
+    let messages = document.querySelector('#messages').lastElementChild;
+    messages.scrollIntoView();
+}
+
 // built in event listeners connect and disconnect
 // When we listen to events we use .on
 socket.on('connect', function () {
@@ -23,6 +30,7 @@ socket.on('newMessage', function (message) {
                     </div>`;
 
     document.querySelector('ul.chatMessages').appendChild(li);
+    scrollToBottom();
 });
 
 socket.on('newLocationMessage', function (message) {
@@ -37,6 +45,7 @@ socket.on('newLocationMessage', function (message) {
                     </div>`;
 
     document.querySelector('ul.chatMessages').appendChild(li);
+    scrollToBottom();
 });
 
 document.querySelector('#submit-btn').addEventListener('click', function (e){
