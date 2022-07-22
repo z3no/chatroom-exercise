@@ -11,13 +11,26 @@
     <link rel="stylesheet" href="css/style.css">
 
 </head>
-<body>
+<body class="center">
 
+    <div class="centerForm">
+        <form action="/chat.html">
+            <div class="form-field">
+                <h3>Join chatroom</h3>
+            </div>
+            <div class="form-field">
+                <label>Username</label>
+                <input type="text" name="name" autofocus>
+            </div>
+            <div class="form-field">
+                <label>Name chatroom</label>
+                <input type="text" name="room" autofocus>
+            </div>
+            <div class="form-field">
+                <button class="joinButton">Join</button>
+            </div>
+        </form>
+    </div>
 
-
-
-<!-- SCRIPTS -->
-<script src="/socket.io/socket.io.js"></script>
-<script defer src="js/script.js"></script>
 </body>
 </html>
