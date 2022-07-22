@@ -10,17 +10,24 @@
 </head>
 <body class="chat">
 
-    <div class="users__sidebar">
-        <h3>People</h3>
+    <div class="userSidebar">
+        <h3>Users</h3>
         <div id="users"></div>
     </div>
 
-    <form id="messageForm">
-        <input type="text" name="message" placeholder="message">
-        <button type="submit" id="submit-btn">Submit</button>
-    </form>
+    <div class="chatWindow">
 
-    <button type="button" id="sendLocation">Send Location</button>
+        <ul id="messages" class="chatMessages"></ul>
+
+        <div class="chatFooter">
+            <form id="messageForm">
+                <input type="text" name="Your message" placeholder="message" autofocus autocomplete="off">
+                <button type="submit" id="submit-btn" class="sendButton">Send</button>
+                <button type="button" id="sendLocation" class="sendButton">Send Location</button>
+            </form>
+        </div>
+
+    </div>
 
 
 <!-- SCRIPTS -->
