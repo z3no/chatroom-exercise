@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 
 const {newMessage, newLocationMessage} = require('./utils/message');
+const {realString} = require('./utils/realString');
 
 // We will use express and http to host our client
 // Define our application
@@ -31,9 +32,20 @@ io.on('connection', (socket) => {
     counter++;
     console.log(counter+' someone connected.');
 
-    socket.emit('newMessage', newMessage('Admin', 'Welcome to the chat!'));
+    socket.on('join', (params, callback) => {
+        if(!realString(params.name) || !realString(params.room)){
+            callback('Name and room are required');
+        }
 
-    socket.broadcast.emit('newMessage', newMessage('Admin', 'New user joined!'));
+        console.log(socket.id);
+        socket.join(params.room);
+
+        socket.emit('newMessage', newMessage('Admin', `Welcome to ${params.room}!`));
+
+        socket.broadcast.to(params.room).emit('newMessage', newMessage('Admin', 'New user joined!'));
+
+        callback();
+    })
 
     socket.on('createMessage', (message, callback) => {
         console.log("createMessage", message);

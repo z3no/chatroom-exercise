@@ -1,7 +1,7 @@
 // Define socket
 let socket = io();
 
-// Function to automatically scroll down when someone sents a new message
+// Function to automatically scroll down when someone sent a new message
 function scrollToBottom () {
     //last message the user sent = lastElementChild
     let messages = document.querySelector('#messages').lastElementChild;
@@ -12,6 +12,18 @@ function scrollToBottom () {
 // When we listen to events we use .on
 socket.on('connect', function () {
     console.log('Connected to server.');
+
+    let searchQuery = window.location.search.substring(1);
+    let params = JSON.parse('{"' + decodeURI(searchQuery).replace(/&/g, '","').replace(/\+/g, '').replace(/=/g,'":"') + '"}');
+
+    socket.emit('join', params, function(error) {
+        if(error){
+            alert(error);
+            window.location.href = '/';
+        }else {
+            console.log('There is no error');
+        }
+    })
 });
 
 socket.on('disconnect', function () {
